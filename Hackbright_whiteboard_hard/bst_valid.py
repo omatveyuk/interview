@@ -56,6 +56,49 @@ less than its parent, 6, but it's also less than its grandparent,
 
     >>> t.is_valid()
     False
+
+                17
+         10           25
+      5      13    20    30
+    3   6  11    18  22    40
+   1 4
+
+    >>> t = Node(17,
+    ...       Node(10,
+    ...         Node(5,
+    ...           Node(3, Node(1), Node(4)),
+    ...           Node(6)),
+    ...         Node(13, Node(11))
+    ...       ),
+    ...       Node(25,
+    ...         Node(20, Node(18), Node(22)),
+    ...         Node(30, Node(None), Node(40))
+    ...       )
+    ...         )
+    >>> t.is_valid()
+    True
+
+                    17
+         10           25
+      5      13    20    30
+    3   6  11    18  22    40
+   1 4   21
+
+    >>> t = Node(17,
+    ...       Node(10,
+    ...         Node(5,
+    ...           Node(3, Node(1), Node(4)),
+    ...           Node(6, Node(None), Node(21))),
+    ...         Node(13, Node(11))
+    ...       ),
+    ...       Node(25,
+    ...         Node(20, Node(18), Node(22)),
+    ...         Node(30, Node(None), Node(40))
+    ...       )
+    ...         )
+    >>> t.is_valid()
+    False
+
 """
 
 
@@ -69,18 +112,52 @@ class Node:
         self.right = right
         self.data = data
 
-    def is_valid_subtree(grandpa_value, parent):
-        if parent.left is None and parent.right is None:
-            return True
-
-        return (parent.left.data < grandpa_value and parent.right.data < grandpa_value) and \
-                
-
-
-
     def is_valid(self):
         """Is this tree a valid BST?"""
-        return is_valid_subtree(self.data, self.left) and is_valid_subtree(self.data, self.right)
+        def is_valid_subtree(node):
+
+            # base case
+            if node is None:
+                return True
+
+            # if parent does not have Left child
+            if node.left is None:
+                left = True
+
+            # if Left child exists check also grand children of Left child and
+            # call recursievly is_valid for each granchild
+            elif node.left.data < node.data:
+                left = ((node.left.left is None) or \
+                        (node.left.left.data < node.left.data and node.left.left.data < node.data)) and \
+                       ((node.left.right is None) or \
+                        (node.left.right.data > node.left.data and node.left.right.data < node.data)) and \
+                       is_valid_subtree(node.left.left) and is_valid_subtree(node.left.right)
+
+            # if Left child is greater than parent
+            else:
+                left = False
+
+            # if parent does not have Right child
+            if node.right is None:
+                right = True
+
+            # if Right child exists check also grand children of Right child and
+            # call recursievly is_valid for each granchild
+            elif node.right.data > node.data:
+                right = ((node.right.left is None) or \
+                         (node.right.left.data < node.right.data and node.right.left.data > node.data)) and \
+                        ((node.right.right is None) or \
+                         (node.right.right.data > node.right.data and node.right.right.data > node.data)) and \
+                        is_valid_subtree(node.right.left) and is_valid_subtree(node.right.right)
+
+            # if Right child is less than parent
+            else:
+                right = False
+
+            return left and right
+
+        return is_valid_subtree(self)
+
 
 if __name__ == "__main__":
     import doctest
