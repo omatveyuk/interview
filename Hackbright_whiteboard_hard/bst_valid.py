@@ -114,7 +114,7 @@ class Node:
 
     def is_valid(self):
         """Is this tree a valid BST?"""
-        def is_valid_subtree(node):
+        def _is_valid_subtree(node):
 
             # base case
             if node is None:
@@ -131,7 +131,7 @@ class Node:
                         (node.left.left.data < node.left.data and node.left.left.data < node.data)) and \
                        ((node.left.right is None) or \
                         (node.left.right.data > node.left.data and node.left.right.data < node.data)) and \
-                       is_valid_subtree(node.left.left) and is_valid_subtree(node.left.right)
+                       _is_valid_subtree(node.left.left) and _is_valid_subtree(node.left.right)
 
             # if Left child is greater than parent
             else:
@@ -148,7 +148,7 @@ class Node:
                          (node.right.left.data < node.right.data and node.right.left.data > node.data)) and \
                         ((node.right.right is None) or \
                          (node.right.right.data > node.right.data and node.right.right.data > node.data)) and \
-                        is_valid_subtree(node.right.left) and is_valid_subtree(node.right.right)
+                        _is_valid_subtree(node.right.left) and _is_valid_subtree(node.right.right)
 
             # if Right child is less than parent
             else:
@@ -156,7 +156,7 @@ class Node:
 
             return left and right
 
-        return is_valid_subtree(self)
+        return _is_valid_subtree(self)
 
 
 if __name__ == "__main__":
