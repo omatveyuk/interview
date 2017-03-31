@@ -41,8 +41,9 @@ def coins(num_coins):
 
     This should return a set of the unique amounts of change possible.
     """
+    # SOLUTION 1
     sum_coins = set([])
-    for i in xrange(0, num_coins+1):
+    for i in xrange(num_coins+1):
         sum_coins.add(i * 10 + (num_coins - i))
     return sum_coins
 
