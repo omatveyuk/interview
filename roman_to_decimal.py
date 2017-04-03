@@ -12,6 +12,9 @@
     >>> convert_roman("VII")
     7
 
+    >>> convert_roman("VIII")
+    8
+
     >>> convert_roman("MDCC")
     1700
 
@@ -35,6 +38,9 @@
 
     >>> convert_roman("DV")
     505
+
+    >>> convert_roman("MCMLXXXIV")
+    1984
 """
 
 def convert_roman(roman):
@@ -48,22 +54,38 @@ def convert_roman(roman):
                'M': 1000}
 
     number = 0
-    roman_lst = list(roman)
+    # roman_lst = list(roman)
 
-    while len(roman_lst) > 1:
-        number1 = d_roman[roman_lst.pop()]
-        number2 = d_roman[roman_lst[-1]]
+    # while len(roman_lst) > 1:
+    #     number1 = d_roman[roman_lst.pop()]
+    #     number2 = d_roman[roman_lst[-1]]
 
-        if number2 >= number1:
-            number += number1
+    #     if number2 >= number1:
+    #         number += number1
+    #     else:
+    #         number += number1 - number2
+    #         roman_lst.pop()
+
+    # if len(roman_lst) == 1:
+    #     number += d_roman[roman_lst[0]]
+
+    # return number
+
+    import sys
+    prev = sys.maxint
+    number = 0
+    for char in roman:
+        if d_roman[char] <= prev:
+            number += d_roman[char]
         else:
-            number += number1 - number2
-            roman_lst.pop()
-
-    if len(roman_lst) == 1:
-        number += d_roman[roman_lst[0]]
+            number += d_roman[char] - 2 * prev
+        prev = d_roman[char]
 
     return number
+
+
+
+
 
 
 
