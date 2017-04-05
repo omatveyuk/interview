@@ -126,9 +126,32 @@ class FriendGraph(object):
 
     def are_connected(self, name1, name2):
         """Is this name1 friends with name2?"""
+        #MY SOLUTION
+        def _look_friends(adjacent, seen, name):
+            """Recursive function to check if node connects w/person name.
+
+            :seen: is a set of all nodes that have been visited.
+            """
+
+            # Use a DFS (depth-first search) to see if the nodes connect.
+            # This recurses for each adjacent node of the passed-in node,
+            # but it keeps track of nodes visited in a set, so it can avoid loops.
+            for each in adjacent:
+                if each not in seen:
+                    if each.name == name2:
+                        return True
+                    seen.add(each)
+                    if (False or _look_friends(each.adjacent, seen, name2)):
+                        return True
+
+            return False
+
+        person = self.nodes[name1]
+        seen = set([person])
+        return _look_friends(person.adjacent, seen, name2)
 
 
 if __name__ == '__main__':
     import doctest
     if doctest.testmod().failed == 0:
-        print "\n*** ALL TESTS PASSED. GREAT!\n"
+        print "\n*** ALL TESTS PASSED. GREAT! ***\n"
