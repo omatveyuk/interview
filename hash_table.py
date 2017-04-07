@@ -7,6 +7,9 @@
     { 'aaa' : 3 , 'a' : 1 , 'aa' : 2 , }
     >>> ht.get('aaa')
     3
+    >>> ht.delete('aa')
+    >>> ht.display()
+    { 'aaa' : 3 , 'a' : 1 , }
 
     >>> ht = HashTable()
     >>> ht.set('b', 98)
@@ -19,9 +22,10 @@
     294
     >>> ht.get('abc')
     294
+    >>> ht.delete('bbb')
+    >>> ht.display()
+    { 'abc' : 294 , 'b' : 98 , 'bb' : 196 , }
 
-
-    
 """
 class KeyValue(object):
     def __init__(self, key, value):
@@ -48,6 +52,13 @@ class HashTable(object):
         for item in self.hashlst[index_hashlst]:
             if item.key == key:
                 return item.value
+
+    def delete(self, key):
+        """Delete pair ket, value from Hash Table with index from hash(key)"""
+        index_hashlst = self._hash(key)
+        for item in self.hashlst[index_hashlst]:
+            if item.key == key:
+                self.hashlst[index_hashlst].remove(item)
 
     def _hash(self, key):
         """ Calculate index in Hash Table """
