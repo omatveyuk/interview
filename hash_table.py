@@ -42,27 +42,43 @@ class HashTable(object):
         self.hashlst = [[] for i in xrange(self.SIZE)]
 
     def set(self, key, value):
-        """Put pair key, value in Hash Table with index from hash(key)"""
+        """Put pair key, value in Hash Table with index from hash(key)."""
+        # Call _hash(key) to get an integer index
         index_hashlst = self._hash(key)
+
+        # Create a new KeyValue object and append it into the bucket 
+        # at the index_th place in the list
         self.hashlst[index_hashlst].append(KeyValue(key, value))
 
     def get(self, key):
         """Get pair value from Hash Table by hash(key)"""
+        # Call _hash(key) to get an index
         index_hashlst = self._hash(key)
+
+        # loop through key-value pairs at the bucket, looking for key
         for item in self.hashlst[index_hashlst]:
             if item.key == key:
+                # Return KeyValue object
                 return item.value
 
     def delete(self, key):
         """Delete pair ket, value from Hash Table with index from hash(key)"""
+        # Call _hash(key) to get an index
         index_hashlst = self._hash(key)
+        # Loop through key-value pairs at the bucket, looking for key
         for item in self.hashlst[index_hashlst]:
             if item.key == key:
+                # Remove KeyValue object
                 self.hashlst[index_hashlst].remove(item)
 
     def _hash(self, key):
         """ Calculate index in Hash Table """
+        # Loop through the characters of the key,
+        # Convert the character to a number (use ord(c) – ASCII),
+        # Add this number to total sum
         total = sum([ord(char) for char in key])
+
+        # Return total sum modulo size of Hash Table (reminder)
         return total % self.SIZE
 
     def display(self):
