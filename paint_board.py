@@ -52,7 +52,7 @@
     . . . * .
     . . . . *
 
-    >>> board.paint_from_board_to_board(6,1,'-')
+    >>> board.paint_from_border_to_border(6,1,'-')
     >>> board.display()
     - * . . .
     - * . . .
@@ -62,17 +62,7 @@
     - - - * .
     - - - - *
 
-    >>> board.paint_from_board_to_board(5,4,'K')
-    >>> board.display()
-    - * . . .
-    - * . . .
-    - - * . .
-    - - - * .
-    - - - - *
-    - - - * K
-    - - - - *
-
-    >>> board.paint_from_board_to_board(25,44,'K')
+    >>> board.paint_from_border_to_border(5,4,'K')
     >>> board.display()
     - * . . .
     - * . . .
@@ -82,6 +72,67 @@
     - - - * K
     - - - - *
 
+    >>> board.paint_from_border_to_border(25,44,'K')
+    >>> board.display()
+    - * . . .
+    - * . . .
+    - - * . .
+    - - - * .
+    - - - - *
+    - - - * K
+    - - - - *
+
+    >>> board.paint_all_board('.')
+    >>> board.paint_cell(0,1,'*')
+    >>> board.paint_cell(1,1,'*')
+    >>> board.paint_cell(2,2,'*')
+    >>> board.paint_cell(3,3,'*')
+    >>> board.display()
+    . * . . .
+    . * . . .
+    . . * . .
+    . . . * .
+    . . . . .
+    . . . . .
+    . . . . .
+
+    >>> board.paint_from_border_to_border(6,1,'-')
+    >>> board.display()
+    - * - - -
+    - * - - -
+    - - * - -
+    - - - * -
+    - - - - -
+    - - - - -
+    - - - - -
+
+    >>> board.paint_all_board('.')
+    >>> board.paint_cell(0,1,'*')
+    >>> board.paint_cell(1,1,'*')
+    >>> board.paint_cell(2,2,'*')
+    >>> board.paint_cell(3,1,'*')
+    >>> board.paint_cell(3,3,'*')
+    >>> board.paint_cell(4,4,'*')
+    >>> board.paint_cell(5,3,'*')
+    >>> board.paint_cell(6,4,'*')
+    >>> board.display()
+    . * . . .
+    . * . . .
+    . . * . .
+    . * . * .
+    . . . . *
+    . . . * .
+    . . . . *
+
+    >>> board.paint_from_border_to_border(6,1,'-')
+    >>> board.display()
+    - * . . .
+    - * . . .
+    - - * . .
+    - * - * .
+    - - - - *
+    - - - * .
+    - - - - *
 
 
 
@@ -104,7 +155,8 @@ class Cell(object):
 
 
 class Board(object):
-    stack = []
+    #stack = []
+    stack = set([])
     def __init__(self, height, width):
         """Create and initialize board with dot"""
         self.width = width
@@ -143,22 +195,42 @@ class Board(object):
                 self.board[h][w].color = color
 
     def get_west_north_east_south(self, cell):
+        """Get cells aroud cell (west, north, ast, south)"""
         return [self.get_cell(cell.h, cell.w - 1), self.get_cell(cell.h + 1, cell.w), \
                 self.get_cell(cell.h, cell.w + 1), self.get_cell(cell.h - 1, cell.w)]
 
-    def paint_from_board_to_board(self, h, w, color):
+    def paint_from_border_to_border(self, h, w, color):
+        """Paint board from border to border"""
+        # SOLUTION 1
+        # cell = self.get_cell(h, w)
 
+        # if cell is not None and cell.is_valid():
+        #     self.stack.append(cell)
+
+        # while self.stack != []:
+        #     cell = self.stack.pop()
+        #     cell.color = color
+        #     west_norh_east_south = self.get_west_north_east_south(cell) 
+        #     self.stack.extend([cell for cell in west_norh_east_south if cell is not None and cell.is_valid()])
+        
+        # SOLUTION 2
         cell = self.get_cell(h, w)
 
         if cell is not None and cell.is_valid():
-            self.stack.append(cell)
+            self.stack.add(cell)
 
-        while self.stack != []:
-            cell = self.stack.pop(0)
+        while len(self.stack) > 0:
+            cell = self.stack.pop()
             cell.color = color
             west_norh_east_south = self.get_west_north_east_south(cell) 
-            self.stack.extend([cell for cell in west_norh_east_south if cell is not None and cell.is_valid()])
+            for cell in west_norh_east_south:
+                if cell is not None and cell.is_valid():
+                    self.stack.add(cell)
+
+    
         
+
+
 
 if __name__ == '__main__':
     import doctest
