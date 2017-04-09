@@ -134,9 +134,36 @@
     - - - * .
     - - - - *
 
+    >>> board.paint_all_board('.')
+    >>> board.paint_cell(0,1,'*')
+    >>> board.paint_cell(1,1,'*')
+    >>> board.paint_cell(2,2,'*')
+    >>> board.paint_cell(3,3,'*')
+    >>> board.paint_cell(4,4,'*')
+    >>> board.paint_cell(5,3,'*')
+    >>> board.paint_cell(6,4,'*')
+    >>> board.paint_cell(3,1,'*')
+    >>> board.paint_cell(4,0,'*')
+    >>> board.paint_cell(5,1,'*')
+    >>> board.paint_cell(6,2,'*')
+    >>> board.display()
+    . * . . .
+    . * . . .
+    . . * . .
+    . * . * .
+    * . . . *
+    . * . * .
+    . . * . *
 
-
-
+    >>> board.paint_from_border_to_border(3,2,'-')
+    >>> board.display()
+    . * . . .
+    . * . . .
+    . . * . .
+    . * - * .
+    * - - - *
+    . * - * .
+    . . * . *
 
 """
 
@@ -201,7 +228,7 @@ class Board(object):
 
     def paint_from_border_to_border(self, h, w, color):
         """Paint board from border to border"""
-        # SOLUTION 1
+        # SOLUTION 1   inefficient
         # cell = self.get_cell(h, w)
 
         # if cell is not None and cell.is_valid():
