@@ -68,15 +68,6 @@
     >>> t.find_node(4)
     <Node 4; left: None; right: None>
 
-    >>> t.delete(4)
-    >>> t.find_node(4) is None
-    True
-    >>> t.left.left.left.right is None
-    True
-
-
-
-    
 
 
 """
@@ -136,29 +127,6 @@ class Node(object):
             else:
                 return self.left.find_node(data)
 
-
-
-
-    def delete(self, data):
-        """ Delete Node from BST.
-        Three casses:
-        node is a leaf
-        node has one child
-        node has two children
-
-        """
-        # Find node
-        node = self.find_node(data)
-        print id(node)
-        print id(self.find_node(data))
-        print node
-
-        #Case 1: node is a leaf
-        if node.left == node.right == None:
-            node = None
-            print node
-            self.find_node(data) = None
-            print self.find_node(data)
 
 
 
