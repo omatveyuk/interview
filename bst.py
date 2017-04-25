@@ -35,13 +35,13 @@
 
 
     >>> t.insert(4)
-    >>> t.insert(10)
+    >>> t.insert(11)
 
     >>> t.root.left.left.left.data == 0
     True
     >>> t.root.left.left.left.right.data == 4
     True
-    >>> t.root.left.right.left.data == 10
+    >>> t.root.left.right.left.data == 11
     True
     >>> t.root.left.left.right is None
     True
@@ -72,22 +72,43 @@
     5
 
     >>> t.inOrder()
-    0 4 7 10 10 13 14 15 23 25 26 27 38 40
+    0 4 7 10 11 13 14 15 23 25 26 27 38 40
 
     >>> t.postOrder()
-    4 0 7 10 14 13 10 23 26 25 40 38 27 15
+    4 0 7 11 14 13 10 23 26 25 40 38 27 15
 
     >>> t.preOrder()
-    15 10 7 0 4 13 10 14 27 25 23 26 38 40
+    15 10 7 0 4 13 11 14 27 25 23 26 38 40
 
     >>> t.levelOrder()
-    15 10 27 7 13 25 38 0 10 14 23 26 40 4
+    15 10 27 7 13 25 38 0 11 14 23 26 40 4
 
+    Delete leaf-node
     >>> t.delete(40)
     >>> t.find(40)
     False
-    >>> t.root.right.right.right
     >>> t.root.right.right.right is None
+    True
+
+    Delete node with one child
+    >>> t.delete(0)
+    >>> t.find(0)
+    False
+    >>> t.root.left.left.left.data == 4
+    True
+    >>> t.root.left.left.left.right is None
+    True
+
+    Delete node with two children
+    >>> t.delete(10)
+    >>> t.find(10)
+    False
+    >>> t.root.left.data == 11
+    True
+    >>> t.root.left.right.left is None
+    True
+    >>> t.root.left.right.left
+    >>> t.root.left.right.right.data == 14
     True
 
 """
@@ -169,27 +190,25 @@ class Node(object):
         """Return True is Node is found or False"""
         # Found node
         if data == self.data:
-            print "FIND NODE", self
-            print id(self)
+            # print "FIND NODE", self
             return True
 
         # Go to the right subtree
         if data > self.data:
-            print "{0} > {1} Go to the right subtree".format(data, self.data)
+            # print "{0} > {1} Go to the right subtree".format(data, self.data)
             if self.right:
                 return self.right.find(data)
             # The data doesn't exist in BST
-            print "DON'T FIND NODE"
+            # print "DON'T FIND NODE"
             return False
 
         # Go to the left subtree
         else:
             if self.left:
-                print "{0} < {1} Go to the left subtree".format(data, self.data)
+                # print "{0} < {1} Go to the left subtree".format(data, self.data)
                 return self.left.find(data)
             # The data doesn't exist in BST
-            print "DON'T FIND NODE"
-
+            # print "DON'T FIND NODE"
             return False
 
     def getHeight(self):
@@ -262,49 +281,59 @@ class Node(object):
 
     def delete(self, data):
         """Delete Node with data from the Binary Search Tree."""
-        if self:
-            if data < self.data:
-                print "{0} < {1} Go to the left subtree".format(data, self.data)
-                self.left.delete(data)
-            elif data > self.data:
-                print "{0} > {1} Go to the right subtree".format(data, self.data)
-                self.right.delete(data)
-            else:
-                print "{0} == {1} FIND Node".format(data, self.data)
-                print "ID NODE", id(self)
-                # Node to be deleted is leaf. Simply remove Node
-                if self.left is None and self.right is None:
-                    print "Node is leaf.", self
-                    print id(self), self
-                    del(self)
-                    # self = None
-                    # print id(self), self
+        # Find node which will be deleted
+        current = parent = self
+        while current and current.data != data:
+            parent = current
+            if current.data > data:
+                # print "{0} < {1} Go to the left subtree".format(data, current.data)
+                current = current.left
+            elif current.data < data:
+                # print "{0} > {1} Go to the right subtree".format(data, current.data)
+                current = current.right
 
-                # Node to be deleted has one child. Copy child to the Node and delete child
-                elif self.left is None:
-                    print "Node has only right child {0}".format(self.right) 
-                    self = self.right
-                elif self.right is None:
-                    print "Node has only left child {0}".format(self.left) 
-                    self = self.left
-
-                # Node to be deleted has two children.
-                # Find inorder successor of the node (smallest in the right subtree).
-                # (for another solution you can use preorder succesor (biggest in the left subtree))
+        if current:
+            # print "{0} == {1} FIND Node".format(data, current.data)
+            # Node to be deleted is leaf. Simply remove Node
+            if current.left is None and current.right is None:
+                # print "Node is leaf.", current
+                if parent.data > data:
+                    parent.left = None
                 else:
-                    print "Node has two children {0}, {1}".format(self.left, self.right)
-                    print "Find the leftmost leaf in the right subtree" 
-                    current = self.right
-                    # loop down to find the leftmost leaf (smallest in the right subtree)
-                    while(current.left is not None):
-                        current = current.left 
-                    print current.data
-                    # Copy the inorder successor's content to node which will be deleted
-                    print "deleted node: ", self
-                    self.data = current.data
-                    print "After delete", self
-                    # Delete the inorder successor
-                    current = None
+                    parent.right = None
+
+            # Node to be deleted has one child. Copy child to the Node and delete child
+            elif current.left is None:
+                # print "Node has only right child {0}".format(current.right) 
+                if parent.data > data:
+                    parent.left = current.right
+                else:
+                    parent.right = current.right
+            elif current.right is None:
+                # print "Node has only left child {0}".format(current.left)
+                if parent.data > data:
+                    parent.left = current.left
+                else:
+                    parent.right = current.left
+
+            # Node to be deleted has two children.
+            # Find inorder successor of the node (smallest in the right subtree).
+            # (for another solution you can use preorder succesor (biggest in the left subtree))
+            else:
+                # print "Node has two children {0}, {1}".format(current.left, current.right)
+                # print "Find the leftmost leaf in the right subtree"
+                leftmost = parent_leftmost = current.right
+                # loop down to find the leftmost leaf (smallest in the right subtree)
+                while(leftmost.left is not None):
+                    parent_leftmost = leftmost
+                    leftmost = leftmost.left 
+                # print leftmost.data
+                # Copy the inorder successor's content to node which will be deleted
+                # print "deleted node: ", current
+                current.data = leftmost.data
+                # print "After delete", current
+                # Delete the inorder successor
+                parent_leftmost.left = None
  
 
 
