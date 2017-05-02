@@ -2,6 +2,8 @@
     Implement an algorithm to detemine if a string has all unique characters
     without using additional data structures.
 """
+
+
 def allUniqueChar(string):
     """Check if all chars in string is unique.
         Return: True if all chars is unique, othrwise False.
@@ -21,8 +23,6 @@ def allUniqueChar(string):
 
 if __name__ == '__main__':
     import doctest
-    
+
     if doctest.testmod().failed == 0:
         print "\n*** ALL TESTS PASSED.  all_unique_char.py  WORKS SUCCESSFULLY! ***\n"
-
-
