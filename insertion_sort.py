@@ -19,7 +19,7 @@ it goes--as soon as we find a number smaller than it, we insert item after this 
 def insertion_sort(alist):
     """Given a list, sort it using insertion sort."""
 
-    for i in xrange(len(alist)):
+    for i in xrange(1, len(alist)):
         j = i
         while j > 0 and alist[j-1] > alist[j]:
             alist[j-1], alist[j] = alist[j], alist[j-1]
