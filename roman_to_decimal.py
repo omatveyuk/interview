@@ -41,6 +41,9 @@
 
     >>> convert_roman("MCMLXXXIV")
     1984
+
+    >>> convert_roman('MLXXXIV')
+    1084
 """
 
 def convert_roman(roman):
