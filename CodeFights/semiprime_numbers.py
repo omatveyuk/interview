@@ -1,5 +1,20 @@
 def semiprimeByNumber(n):
     import math
+"""Find the nth semiprime number.
+   A semiprime is a positive integer number that is the product of two 
+   (not necessarily distinct) prime numbers.
+
+   >>> semiprimeByNumber(15)
+   39
+
+   >>> semiprimeByNumber(1)
+   4
+
+   >>> semiprimeByNumber(2)
+   6
+"""
+def semiprimeByNumber(n):
+    import math
     def isPrime(number):
         if number == 2:
             return True
@@ -26,9 +41,7 @@ def semiprimeByNumber(n):
     primes = set([2])
     while count < n:
         denomenators = findDenomenators(number)
-        print denomenators
         cur_primes = findPrimes(denomenators, primes)
-        print cur_primes
         for i in xrange(len(cur_primes)):
             for j in xrange(i+1):
                 if cur_primes[i]* cur_primes[j] == number:
@@ -38,9 +51,9 @@ def semiprimeByNumber(n):
 
         number += 1
 
-
-
-    # semiprimes.sort()
-    # return semiprimes[n-1]
-
-print semiprimeByNumber(15)
+if __name__ == "__main__":
+    debug = True
+    if debug:
+        from doctest import testmod
+        if testmod().failed == 0:
+            print "********** All Tests are passed. *************"
