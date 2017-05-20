@@ -14,14 +14,20 @@
 def quick_sort(ar):    
     if len(ar) <= 1:
         return ar
+    # version 1
+    # left = []
+    # right = []
+    # for i in xrange(1, len(ar)):
+    #     if ar[i] > ar[0]:
+    #         right.append(ar[i])
+    #     if ar[i] < ar[0]:
+    #         left.append(ar[i])
 
-    left = []
-    right = []
-    for i in xrange(1, len(ar)):
-        if ar[i] > ar[0]:
-            right.append(ar[i])
-        if ar[i] < ar[0]:
-            left.append(ar[i])
+    # version 2
+    pivot = ar[0]
+    left = [item for item in ar if item < pivot]
+    right = [item for item in ar if item > pivot]
+    
 
     # for printing intermediate result:
     # change docstring:
